@@ -1,0 +1,8 @@
+1、大家把代码下载下来之后，直接在这个文件同级目录下面用`npm install`或`cnpm install`安装依赖。安装成功后直接在命令行中敲`npm start`，会自动创建一个本地服务。
+
+2、大家先复制`src/todos`这个文件夹，改成自己的名字。然后修改`src/index.js`文件下的第二行代码`import Todos from './todos/index';`
+
+页面结构我已经弄好了，主要代码在`src/todos/Todos.js`这个文件里。
+
+3、功能描述：实现新增，勾选完成和未完成、删除三个主要功能。
+
