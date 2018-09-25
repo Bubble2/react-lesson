@@ -10,28 +10,12 @@ class TaskBoard extends Component {
         this.state = {
             finishedTasks:[],
             pendingTasks:[],
-            addTask(task){
-                this.state.pendingTasks.push(task);
-            },
-            dealTask(task){
-                this.state.pendingTasks.slice(task.index-1);
-                task.index = this.state.finishedTasks.length+1;
-                this.state.finishedTasks.push(task);
-            },
-            restoreTask(task){
-                this.state.finishedTasks.slice(task.index-1);
-                task.index = this.state.pendingTasks.length+1;
-                this.state.pendingTasks.push(task);
-            },
-            deleteTask(task){
-                if(task.isFinished){
-                    this.state.finishedTasks.slice(task.index-1);
-                }else{
-                    this.state.pendingTasks.slice(task.index-1);
-                }
-            }
         };
         this.addTask = this.addTask.bind(this);
+        this.handleCheck = this.handleCheck.bind(this);
+        this.dealTask = this.dealTask.bind(this);
+        this.restoreTask = this.restoreTask.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
     }
 
     addTask(){
@@ -43,6 +27,50 @@ class TaskBoard extends Component {
         this.setState(state=>({
             pendingTasks:[...state.pendingTasks, task]
         }));
+    }
+    handleCheck(task){
+        if(!task.isFinished){
+            this.dealTask(task);
+        }else{
+            this.restoreTask(task);
+        }
+    }
+    dealTask(task){
+        console.log("before dealTask:",task);
+        task = this.state.pendingTasks[task.index-1];
+        console.log("after dealTask:",task);
+        this.setState({
+            pendingTasks: this.state.pendingTasks.filter((elem, i) => task.index-1 !== i)
+        });
+        task.index = this.state.finishedTasks.length+1;
+        task.isFinished = true;
+        this.setState(state=>({
+            finishedTasks:[...state.finishedTasks, task]
+        }));
+    }
+    restoreTask(task){
+        console.log("before restoreTask:",task);
+        task = this.state.finishedTasks[task.index-1];
+        console.log("after restoreTask:",task);
+        this.setState({
+            finishedTasks: this.state.finishedTasks.filter((elem, i) => task.index-1 !== i)
+        });
+        task.index = this.state.pendingTasks.length+1;
+        task.isFinished = false;
+        this.setState(state=>({
+            pendingTasks:[...state.pendingTasks, task]
+        }));
+    }
+    deleteTask(task){
+        if(task.isFinished){
+            this.setState({
+                finishedTasks: this.state.finishedTasks.filter((elem, i) => task.index-1 !== i)
+            });
+        }else{
+            this.setState({
+                pendingTasks: this.state.pendingTasks.filter((elem, i) => task.index-1 !== i)
+            });
+        }
     }
 
   render() {
@@ -68,7 +96,8 @@ class TaskBoard extends Component {
               </thead>
               <tbody>{
                   this.state.pendingTasks.map((task,index)=>
-                      <Item key={"pending_" + index} {...task}/>
+                      <Item key={"pending_" + index} {...task} handleCheck={this.handleCheck}
+                            deleteTask={this.deleteTask}/>
                   )
               }
               </tbody>
@@ -88,7 +117,8 @@ class TaskBoard extends Component {
             </thead>
               <tbody>{
                   this.state.finishedTasks.map((task,index)=>
-                      <Item key="finished_{index}" {...task}/>
+                      <Item key={"finished_" + index} {...task} handleCheck={this.handleCheck}
+                            deleteTask={this.deleteTask}/>
                   )
               }
 

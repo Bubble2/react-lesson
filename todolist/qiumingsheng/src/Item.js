@@ -5,30 +5,30 @@ class Item extends Component {
 
     constructor(props){
         super(props);
-        console.log("task:",props.task);
         this.state = {
             index:props.index,
             isFinished:props.isFinished,
             name:props.name,
             pendingKey:props.pendingKey,
-            deleteCallback:props.deleteCallback
+            deleteTask:props.deleteTask
         };
-        this.handleCheck = this.handleCheck.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
 
-    handleCheck(){
-        this.setState(state=>({
-            isFinished: !state.isFinished
-        }));
-
-    }
+    handleCheck = ()=>{
+        console.log('handleCheck:',this);
+        this.props.handleCheck({
+            index:this.state.index,
+            isFinished:this.state.isFinished
+        });
+    };
     handleDelete(){
-        this.state.deleteTask({
+        this.props.deleteTask({
             index:this.state.index,
             isFinished:this.state.isFinished
         });
     }
+
   render() {
     return (
       <tr className="item" >
