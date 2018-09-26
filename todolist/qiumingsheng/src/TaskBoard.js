@@ -13,8 +13,6 @@ class TaskBoard extends Component {
         };
         this.addTask = this.addTask.bind(this);
         this.handleCheck = this.handleCheck.bind(this);
-        this.dealTask = this.dealTask.bind(this);
-        this.restoreTask = this.restoreTask.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
     }
 
@@ -29,78 +27,35 @@ class TaskBoard extends Component {
         }));
     }
     handleCheck(task){
-        if(!task.isFinished){
-            this.dealTask(task);
-        }else{
-            this.restoreTask(task);
-        }
-    }
-    dealTask(task){
-        console.log("before dealTask:",task);
-        task = this.state.pendingTasks[task.index];
-        console.log("after dealTask:",task);
-        // let test = this.state.pendingTasks;
-        // console.log("after pendingTasks:",test.filter((elem, i) => task.index !== i));
+        let isFinished = task.isFinished;
         let index = 0;
-        var aa =  this.state.pendingTasks.filter((elem, i) => {
-            if (task.index !== i) {
+        let obj = {};
+        let sourceKey = isFinished?"finishedTasks":"pendingTasks";
+        let targetKey = isFinished?"pendingTasks":"finishedTasks";
+        task = this.state[sourceKey][task.index];
+        obj[sourceKey] = this.state[sourceKey].filter((elem, i) => {
+            if(task.index !== i){
                 elem.index = index++;
             }
             return task.index !== i
-        }
-        this.setState(prevState => {
-            pendingTasks: prevState.pendingTasks.filter((elem, i) => {
-                if (task.index !== i) {
-                    elem.index = index++;
-                }
-                return task.index !== i
-                }
-        )})
-        // this.setState({
-        //     pendingTasks: this.state.pendingTasks.filter((elem, i) => {
-        //         if(task.index !== i){
-        //             elem.index = index++;
-        //         }
-        //         return task.index !== i
-        //     })
-        // },function(){
-        //     console.log("after set:",this.state.pendingTasks);
-        // });
-        task.index = this.state.finishedTasks.length;
-        task.isFinished = true;
-        this.setState(state=>({
-            finishedTasks:[...state.finishedTasks, task]
-        }));
-    }
-    restoreTask(task){
-        console.log("before restoreTask:",task);
-        task = this.state.finishedTasks[task.index];
-        console.log("after restoreTask:",task);
-        let index = 0;
-        this.setState({
-            finishedTasks: this.state.finishedTasks.filter((elem, i) => {
-                if(task.index !== i){
-                    elem.index = index++;
-                }
-                return task.index !== i
-            })
         });
-        task.index = this.state.pendingTasks.length;
-        task.isFinished = false;
-        this.setState(state=>({
-            pendingTasks:[...state.pendingTasks, task]
-        }));
+        task.index = this.state[targetKey].length;
+        task.isFinished = !isFinished;
+        obj[targetKey] = [...this.state[targetKey], task];
+        this.setState(obj);
     }
     deleteTask(task){
-        if(task.isFinished){
-            this.setState({
-                finishedTasks: this.state.finishedTasks.filter((elem, i) => task.index !== i)
-            });
-        }else{
-            this.setState({
-                pendingTasks: this.state.pendingTasks.filter((elem, i) => task.index !== i)
-            });
-        }
+        let index = 0;
+        let obj = {};
+        let key = task.isFinished?"finishedTasks":"pendingTasks";
+        obj[key] = this.state[key].filter((elem, i) => {
+            if(task.index !== i){
+                elem.index = index++;
+            }
+            return task.index !== i
+        });
+        this.setState(obj);
+
     }
 
   render() {

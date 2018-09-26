@@ -5,37 +5,30 @@ class Item extends Component {
 
     constructor(props){
         super(props);
-        this.state = {
-            index:props.index,
-            isFinished:props.isFinished,
-            name:props.name,
-            pendingKey:props.pendingKey,
-            deleteTask:props.deleteTask
-        };
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleCheck = this.handleCheck.bind(this);
     }
 
-    handleCheck = ()=>{
-        console.log('handleCheck:',this);
+    handleCheck(){
         this.props.handleCheck({
-            index:this.state.index,
-            isFinished:this.state.isFinished
+            index:this.props.index,
+            isFinished:this.props.isFinished
         });
     };
     handleDelete(){
         this.props.deleteTask({
-            index:this.state.index,
-            isFinished:this.state.isFinished
+            index:this.props.index,
+            isFinished:this.props.isFinished
         });
     }
 
   render() {
     return (
       <tr className="item" >
-          <td><input type="checkbox" onChange={this.handleCheck} checked={this.state.isFinished}/></td>
-          <td>{this.state.index + 1}</td>
-          <td>{this.state.name}</td>
-          <td>{this.state.isFinished ? "已完成":"未完成"}</td>
+          <td><input type="checkbox" onChange={this.handleCheck} checked={this.props.isFinished}/></td>
+          <td>{this.props.index + 1}</td>
+          <td>{this.props.name}</td>
+          <td>{this.props.isFinished ? "已完成":"未完成"}</td>
           <td><button onClick={this.handleDelete}>删除</button></td>
       </tr>
     );
