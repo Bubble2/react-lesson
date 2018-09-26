@@ -24,14 +24,11 @@ class Todos extends React.Component{
     }
     render(){
         const todoInfo = this.props.todoInfo.filter(item => {
-            if(item.isFinish === false) {
-                return item
-            }
+            return item.isFinish === false
+            
         })
         const finishTodoInfo = this.props.todoInfo.filter(item => {
-            if(item.isFinish === true) {
-                return item
-            }
+            return item.isFinish === true
         })
         return(
             <div>
