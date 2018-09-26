@@ -9,7 +9,7 @@ class TaskBoard extends Component {
         super(props);
         this.state = {
             finishedTasks:[],
-            pendingTasks:[],
+            pendingTasks:[]
         };
         this.addTask = this.addTask.bind(this);
         this.handleCheck = this.handleCheck.bind(this);
@@ -57,7 +57,6 @@ class TaskBoard extends Component {
         this.setState(obj);
 
     }
-
   render() {
     return (
         <div>
@@ -67,9 +66,9 @@ class TaskBoard extends Component {
                            ref={input => this.input = input} />
                 </label>
                 <button onClick={this.addTask}>添加</button>
-
             </div>
             <table>
+                <caption>百卓前端任务看板-未完成</caption>
               <thead>
                   <tr>
                       <th>全选</th>
@@ -86,11 +85,10 @@ class TaskBoard extends Component {
                   )
               }
               </tbody>
-              <tfoot>
-                <tr><td colSpan="5">百卓前端任务看板-未完成</td></tr>
-              </tfoot>
           </table>
+
           <table>
+              <caption>百卓前端任务看板-已完成</caption>
             <thead>
                 <tr>
                     <th>全选</th>
@@ -108,9 +106,6 @@ class TaskBoard extends Component {
               }
 
               </tbody>
-              <tfoot>
-                <tr><td colSpan="5">百卓前端任务看板-已完成</td></tr>
-              </tfoot>
           </table>
         </div>
     );
