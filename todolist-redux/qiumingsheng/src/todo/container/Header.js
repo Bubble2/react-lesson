@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as taskActions from './action';
-import TaskBoard from './component/TaskBoard';
+import * as taskActions from '../action';
+import TaskBoard from '../component/TaskBoard';
 
 const mapStateToProps = state =>({
     tasks:state.pendingTasks
