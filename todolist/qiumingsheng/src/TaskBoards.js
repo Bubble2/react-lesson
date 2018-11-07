@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import Item from './Item.js' ;
+import TaskBoard from './TaskBoard.js' ;
 
 
-class TaskBoard extends Component {
+class TaskBoards extends Component {
 
     constructor(props){
         super(props);
@@ -14,17 +14,27 @@ class TaskBoard extends Component {
         this.addTask = this.addTask.bind(this);
         this.handleCheck = this.handleCheck.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
+        this.handleEnter = this.handleEnter.bind(this);
     }
 
-    addTask(){
+    append(){
         let task = {
             index: this.state.pendingTasks.length,
             name: this.input.value,
             isFinished:false
         };
         this.setState(state=>({
-            pendingTasks:[...state.pendingTasks, task]
+            pendingTasks:[...state.pendingTasks, task],
         }));
+        this.input.value = "";
+    }
+    handleEnter(e){
+        if(e.keyCode === 13){
+            this.append();
+        }
+    }
+    addTask(){
+        this.append();
     }
     handleCheck(task){
         let isFinished = task.isFinished;
@@ -63,53 +73,17 @@ class TaskBoard extends Component {
                 <div>
                     <label htmlFor="taskName"> 任务名称：
                         <input type="text" id="taskName" name="taskName" placeholder="请填写任务名称"
-                               ref={input => this.input = input} />
+                               ref={input => this.input = input} onKeyDown={this.handleEnter}/>
                     </label>
                     <button onClick={this.addTask}>添加</button>
                 </div>
-                <table>
-                    <caption>百卓前端任务看板-未完成({this.unFinishNum})</caption>
-                    <thead>
-                    <tr>
-                        <th>全选</th>
-                        <th>序号</th>
-                        <th>任务名称</th>
-                        <th>完成状态</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>{
-                        this.state.pendingTasks.map((task,index)=>
-                            <Item key={"pending_" + index} {...task} handleCheck={this.handleCheck}
-                                  deleteTask={this.deleteTask}/>
-                        )
-                    }
-                    </tbody>
-                </table>
-
-                <table>
-                    <caption>百卓前端任务看板-已完成({this.finishNum})</caption>
-                    <thead>
-                    <tr>
-                        <th>全选</th>
-                        <th>序号</th>
-                        <th>任务名称</th>
-                        <th>完成状态</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>{
-                        this.state.finishedTasks.map((task,index)=>
-                            <Item key={"finished_" + index} {...task} handleCheck={this.handleCheck}
-                                  deleteTask={this.deleteTask}/>
-                        )
-                    }
-
-                    </tbody>
-                </table>
+                <TaskBoard boardName="百卓前端任务看板-未完成" unFinishNum={this.state.pendingTasks.length}
+                    tasks={this.state.pendingTasks} handleCheck={this.handleCheck} deleteTask={this.deleteTask}/>
+                <TaskBoard boardName="百卓前端任务看板-已完成" unFinishNum={this.state.finishedTasks.length}
+                       tasks={this.state.finishedTasks} handleCheck={this.handleCheck} deleteTask={this.deleteTask}/>
             </div>
         );
     }
 }
 
-export default TaskBoard;
+export default TaskBoards;

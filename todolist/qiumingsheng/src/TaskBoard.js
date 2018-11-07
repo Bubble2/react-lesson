@@ -1,23 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Item from './Item.js' ;
-
 
 function TaskBoard(props) {
 
-    let addTask = ()=>{
-        props.addTask();
+    let handleCheck = (task)=>{
+        props.handleCheck(task);
     };
-    let handleCheck = ()=>{
-        props.handleCheck();
+    let deleteTask = (task)=>{
+        props.deleteTask(task);
     };
-    let deleteTask = ()=>{
-        props.deleteTask();
-    };
-
 
     return (
         <table>
-            <caption>{props.taskName}({this.unFinishNum})</caption>
+            <caption>{props.boardName}({props.unFinishNum})</caption>
             <thead>
             <tr>
                 <th>全选</th>
@@ -28,9 +23,9 @@ function TaskBoard(props) {
             </tr>
             </thead>
             <tbody>{
-                this.state.pendingTasks.map((task,index)=>
-                    <Item key={"pending_" + index} {...task} handleCheck={this.handleCheck}
-                          deleteTask={this.deleteTask}/>
+                props.tasks.map((task,index)=>
+                    <Item key={"pending_" + index} {...task} handleCheck={handleCheck}
+                          deleteTask={deleteTask}/>
                 )
             }
             </tbody>
