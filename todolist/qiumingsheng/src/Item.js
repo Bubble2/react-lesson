@@ -1,5 +1,5 @@
 import React from 'react';
-function Item1(props){
+function Item(props){
 
     let handleCheck = ()=>{
         props.handleCheck({
@@ -24,4 +24,4 @@ function Item1(props){
     );
 }
 
-export default Item1;
+export default Item;
