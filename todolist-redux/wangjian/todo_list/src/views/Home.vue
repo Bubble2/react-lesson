@@ -5,7 +5,7 @@
 		<div class="ToDoList_part">
 			<div class="listHead">
 				<h3>正在进行</h3>
-				<span class="doNum">0</span>
+				<span class="doNum">{{doing.length}}</span>
 			</div>
 			<ul class="list">
 				<li class="item" v-for="(item,index) in doing" :key="item.id">
@@ -21,7 +21,7 @@
 		<div class="ToDoList_part">
 			<div class="listHead">
 				<h3>已经完成</h3>
-				<span class="doNum">0</span>
+				<span class="doNum">{{done.length}}</span>
 			</div>
 			<ul class="list opcity_50">
 				<li class="item" v-for="(item,index) in done" :key="item.id">
@@ -50,7 +50,9 @@ export default {
     Footer
   },
   data() {
-    return {};
+    return {
+		
+	};
   },
   computed: {
     ...mapState(["doing", "done"])
