@@ -49,5 +49,6 @@ export default function todos(state=initialState,action) {
         case types.ADD_TASK:return addTask(state,action.task);
         case types.DEL_TASK:return deleteTask(state,action.task);
         case types.HANDLE_TASK:return handleCheck(state,action.task);
+        default: return state;
     }
 }

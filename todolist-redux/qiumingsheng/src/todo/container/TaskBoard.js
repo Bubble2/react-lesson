@@ -4,7 +4,8 @@ import * as taskActions from '../action';
 import TaskBoard from '../component/TaskBoard';
 
 const mapStateToProps = state =>({
-    tasks:state.pendingTasks
+    tasks:state.pendingTasks,
+    boardName:"test"
 });
 
 const mapDispatchToProps = dispatch =>({
