@@ -1,16 +1,38 @@
-export const addInfo = (data) => {
+import request from '../../api/request';
+import {fromJS} from 'immutable' 
+
+
+const fetchTodoData = (data) => ({
+    type: 'INITIAL_TODO_INFO_ASYNC',
+    data
+})
+
+const initialTodoInfoAsync = () => dispatch => {
+    return request({type: 101, data: {}}).then((data) => {
+        dispatch(fetchTodoData(fromJS(data.todo_info)))
+    })
+} 
+
+const addInfo = (data) => {
     return {type: 'ADD_TODO_INFO', data}
 }
 
-export const deleInfo = (data) => {
+const deleInfo = (data) => {
     return {type: 'DELETE_TODO_INFO', data}
 }
 
-export const filterInfo = (data) => {
+const filterInfo = (data) => {
     return {type: 'FILTER_TODO_INFO', data}
 }
 
-export const cancelFilterInfo = (data) => {
+const cancelFilterInfo = (data) => {
     return {type: 'CANCEL_FILTER_INFO', data}
 }
 
+export {
+    initialTodoInfoAsync,
+    addInfo,
+    deleInfo,
+    filterInfo,
+    cancelFilterInfo
+}

@@ -3,14 +3,15 @@ import ReactDOM from 'react-dom';
 import Todos from './todos/Todos';
 import registerServiceWorker from './registerServiceWorker';
 import { createStore, applyMiddleware } from 'redux';
-import promiseMiddleware from 'redux-promise'
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import todoApp from './store/reducers';
+
 
 //Todos
 let store = createStore(
     todoApp,
-    applyMiddleware(promiseMiddleware)
+    applyMiddleware(thunk)
 );
 
 
