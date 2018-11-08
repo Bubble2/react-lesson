@@ -15,4 +15,5 @@ router.use('/njpu/ngu', (req, res) => {
     res.json(resData(req.body))
 })
 
+
 module.exports = router
