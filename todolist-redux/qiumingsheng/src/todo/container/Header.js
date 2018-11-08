@@ -1,15 +1,10 @@
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as taskActions from '../action';
-import TaskBoard from '../component/TaskBoard';
+import {addTask,handleEnter,changeText} from '../action';
+import Header from '../component/Header';
 
-const mapStateToProps = state =>({
-    tasks:state.pendingTasks
+const mapStateToProps = (state) =>({
+    input:state.input
 });
 
-const mapDispatchToProps = dispatch =>({
-    actions:bindActionCreators(taskActions,dispatch )
-});
-
-const TaskBoardContainer = connect(mapStateToProps,mapDispatchToProps)(TaskBoard);
+const TaskBoardContainer = connect(mapStateToProps,{addTask,handleEnter,changeText})(Header);
 export default TaskBoardContainer;

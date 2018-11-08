@@ -1,9 +1,9 @@
 import React from 'react';
 import Item from './Item.js' ;
 
-const TaskBoard = (boardName,tasks, actions)=>(
+const TaskBoard = (props)=>(
     <table>
-        <caption>{boardName}({tasks.length})</caption>
+        <caption>{props.boardName}({props.tasks?props.tasks.length:0})</caption>
         <thead>
         <tr>
             <th>全选</th>
@@ -14,9 +14,9 @@ const TaskBoard = (boardName,tasks, actions)=>(
         </tr>
         </thead>
         <tbody>
-        {
-            tasks.map((task,index)=>
-                <Item key={"pending_" + index} task={task} {...actions} />
+        {   props.tasks&&
+            props.tasks.map((task,index)=>
+                <Item key={"pending_" + index} task={task} {...props.actions} />
             )
         }
         </tbody>

@@ -2,53 +2,75 @@ import * as types from './constants'
 
 const initialState = {
   pendingTasks:[],
-  finishedTasks:[]
+  finishedTasks:[],
+  input:""
 };
 
-function addTask(state, task){
-    task.index = state.pendingTasks.length;
-    task.isFinished = false;
-    return {
+function append(state){
+    let task = {
+        name: state.input,
+        index: state.pendingTasks?state.pendingTasks.length:0,
+        isFinished: false
+    };
+    return Object.assign({}, state, {
         pendingTasks:[...state.pendingTasks, task],
+        input:""
+    });
+}
+function addTask(state){
+    return append(state);
+}
+function handleEnter(state,event){
+    if(event.keyCode === 13){
+        return append(state);
     }
 }
 
-function deleteTask(task){
+function deleteTask(state,task){
     let index = 0;
     let obj = {};
     let key = task.isFinished?"finishedTasks":"pendingTasks";
-    obj[key] = this.state[key].filter((elem, i) => {
+    obj[key] = state[key].filter((elem, i) => {
         if(task.index !== i){
             elem.index = index++;
         }
         return task.index !== i
     });
-    return obj
+    return Object.assign({}, state, obj);
 }
 
-function handleCheck(task){
+function handleCheck(state,task){
     let isFinished = task.isFinished;
     let index = 0;
     let obj = {};
     let sourceKey = isFinished?"finishedTasks":"pendingTasks";
     let targetKey = isFinished?"pendingTasks":"finishedTasks";
-    task = this.state[sourceKey][task.index];
-    obj[sourceKey] = this.state[sourceKey].filter((elem, i) => {
+    task = state[sourceKey][task.index];
+    obj[sourceKey] = state[sourceKey].filter((elem, i) => {
         if(task.index !== i){
             elem.index = index++;
         }
         return task.index !== i
     });
-    task.index = this.state[targetKey].length;
+    task.index = state[targetKey].length;
     task.isFinished = !isFinished;
-    obj[targetKey] = [...this.state[targetKey], task];
-    return obj;
+    obj[targetKey] = [...state[targetKey], task];
+    return Object.assign({}, state, obj);
 }
+
+function changeText(state,event){
+    return Object.assign({}, state, {
+        input:event.target.value
+    });
+}
+
 export default function todos(state=initialState,action) {
     switch (action.type) {
-        case types.ADD_TASK:return addTask(state,action.task);
+        case types.ADD_TASK:return addTask(state);
         case types.DEL_TASK:return deleteTask(state,action.task);
         case types.HANDLE_TASK:return handleCheck(state,action.task);
+        case types.CHANGE_TEXT:return changeText(state,action.event);
+        case types.HANDLE_ENTER:return handleEnter(state,action.event);
         default: return state;
     }
 }
