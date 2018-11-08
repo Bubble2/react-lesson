@@ -1,38 +1,27 @@
-import React, { Component } from 'react';
-import './App.css';
+import React from 'react';
+function Item(props){
 
-class Item extends Component {
-
-    constructor(props){
-        super(props);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleCheck = this.handleCheck.bind(this);
-    }
-
-    handleCheck(){
-        this.props.handleCheck({
-            index:this.props.index,
-            isFinished:this.props.isFinished
+    let handleCheck = ()=>{
+        props.handleCheck({
+            index:props.index,
+            isFinished:props.isFinished
         });
     };
-    handleDelete(){
-        this.props.deleteTask({
-            index:this.props.index,
-            isFinished:this.props.isFinished
+    let handleDelete = ()=>{
+        props.deleteTask({
+            index:props.index,
+            isFinished:props.isFinished
         });
-    }
-
-  render() {
+    };
     return (
-      <tr className="item" >
-          <td><input type="checkbox" onChange={this.handleCheck} checked={this.props.isFinished}/></td>
-          <td>{this.props.index + 1}</td>
-          <td>{this.props.name}</td>
-          <td>{this.props.isFinished ? "已完成":"未完成"}</td>
-          <td><button onClick={this.handleDelete}>删除</button></td>
-      </tr>
+        <tr className="item" >
+            <td><input type="checkbox" onChange={handleCheck} checked={props.isFinished}/></td>
+            <td>{props.index + 1}</td>
+            <td>{props.name}</td>
+            <td>{props.isFinished ? "已完成":"未完成"}</td>
+            <td><button onClick={handleDelete}>删除</button></td>
+        </tr>
     );
-  }
 }
 
 export default Item;

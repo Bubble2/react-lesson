@@ -1,6 +1,7 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { addInfo, deleInfo, filterInfo, cancelFilterInfo } from '../store/actions/todo'
+import { initialTodoInfoAsync, addInfo, deleInfo, filterInfo, cancelFilterInfo } from '../store/actions/todo';
 import './index.css';
 
 class Todos extends React.Component{
@@ -10,9 +11,9 @@ class Todos extends React.Component{
             value: ''
         }
     } 
-    addInfo (e, val) {
+    addTodoInfo (e, val) {
         if(e.keyCode === 13){
-            this.props.addTodoInfo(val)
+            this.props.addInfo(val)
             this.setState({value: ''})
         }
     }
@@ -22,36 +23,41 @@ class Todos extends React.Component{
             value: target.value
         })
     }
+    componentDidMount () {
+        this.props.initialTodoInfoAsync();
+    }
     render(){
-        const todoInfo = this.props.todoInfo.filter(item => {
-            return item.isFinish === false
-            
+        const {value} = this.state;
+        const {todoData, addInfo, deleInfo, filterInfo, cancelFilterInfo} = this.props;
+        
+        const todoInfo = todoData.get('todoInfo').filter(item => {
+            return item.get('isFinish') === false 
         })
-        const finishTodoInfo = this.props.todoInfo.filter(item => {
-            return item.isFinish === true
+        const finishTodoInfo = todoData.get('todoInfo').filter(item => {
+            return item.get('isFinish') === true
         })
         return(
             <div>
                 <header>
                     <section>
                         <label htmlFor="title">ToDoList</label>
-                        <input type="text" placeholder="添加ToDo" value={this.state.value} onKeyDown = {(e) => this.addInfo(e, this.state.value)} onChange ={(e) => this.handleChange(e)} autoComplete="off" />
+                        <input type="text" placeholder="添加ToDo" value={value} onKeyDown = {(e) => this.addTodoInfo(e, value)} onChange ={(e) => this.handleChange(e)} autoComplete="off" />
                     </section>
                 </header>
                 <section>
-                    <h2>正在进行 <span>{todoInfo.length}</span></h2>
+                    <h2>正在进行 <span>{todoInfo.size}</span></h2>
                     <ol className="demo-box">
                         {
                             todoInfo.map((item) => ( 
-                                <li key={item.id}><input type="checkbox" onClick={() => this.props.filterTodoInfo(item.id)} /><p>{item.text}</p><a onClick={() => this.props.deleTodoInfo(item.id)}>-</a></li>                                
+                                <li key={item.get('id')}><input type="checkbox" onClick={() => filterInfo(item.get('id'))} /><p>{item.get('text')}</p><a onClick={() => deleInfo(item.get('id'))}>-</a></li>                                
                             ))
                         }
                     </ol>
-                    <h2>已经完成 <span>{finishTodoInfo.length}</span></h2>
+                    <h2>已经完成 <span>{finishTodoInfo.size}</span></h2>
                     <ul>
                         {
                             finishTodoInfo.map((item) => ( 
-                                <li key={item.id}><input type="checkbox" onClick={() => this.props.cancelTodoFilterInfo(item.id)} defaultChecked="checked"/><p>{item.text}</p><a onClick={() => this.props.deleTodoInfo(item.id)}>-</a></li>                                
+                                <li key={item.get('id')}><input type="checkbox" onClick={() => cancelFilterInfo(item.get('id'))} defaultChecked="checked" /><p>{item.get('text')}</p><a onClick={() => deleInfo(item.get('id'))}>-</a></li>                                
                             ))
                         }
                     </ul>
@@ -61,14 +67,20 @@ class Todos extends React.Component{
     }
 }
 
-export default connect(
-    state =>({
-        todoInfo: state.updateTodoInfo.todoInfo
-    }),
-    dispatch => ({
-        addTodoInfo: (data) => dispatch(addInfo(data)),
-        deleTodoInfo: (data) => dispatch(deleInfo(data)),
-        filterTodoInfo: (data) => dispatch(filterInfo(data)),
-        cancelTodoFilterInfo: (data) => dispatch(cancelFilterInfo(data))
-    })
-  )(Todos)
+const mapStateToProps = state => {
+    return {
+        todoData: state.get('updateTodoInfo')
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        initialTodoInfoAsync,
+        addInfo,
+        deleInfo,
+        filterInfo,
+        cancelFilterInfo
+    }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todos);
