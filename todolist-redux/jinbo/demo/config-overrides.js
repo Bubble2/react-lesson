@@ -1,8 +1,4 @@
-const { injectBabelPlugin } = require('react-app-rewired');
 const bodyParser = require('body-parser');
-const path = require('path');
-const modules = require('./module.json');
-const pkg = require('./package.json'); 
 
 module.exports = {
     devServer: function(configFunction) {
